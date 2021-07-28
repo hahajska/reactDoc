@@ -1,13 +1,28 @@
-import "./App.scss";
+import { lazy, Suspense } from "react";
 
-function App() {
+import * as ROUTES from "./constants/routes";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+
+import "./App.scss";
+import Header from "./components/header";
+import Loading from "./components/loading";
+
+const Work = lazy(() => import("./pages/work"));
+const Showcase = lazy(() => import("./pages/showcase"));
+const Home = lazy(() => import("./pages/home"));
+
+export default function App() {
   return (
-    <div className="App h-screen bg-blue-50 flex justify-center items-center">
-      <div className="h-7 w-24 bg-blue-200 flex justify-center items-center rounded-md hover:bg-blue-600 cursor-pointer">
-        <h1>EXPLORE</h1>
-      </div>
-    </div>
+    <Router>
+      <Suspense fallback={Loading}>
+        <Header />
+
+        <Switch>
+          <Route path={ROUTES.HOME} exact component={Home} />
+          <Route path={ROUTES.WORK} component={Work} />
+          <Route path={ROUTES.SHOWCASE} component={Showcase} />
+        </Switch>
+      </Suspense>
+    </Router>
   );
 }
-
-export default App;
